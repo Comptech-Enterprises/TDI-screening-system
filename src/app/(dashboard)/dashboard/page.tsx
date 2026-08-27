@@ -23,7 +23,7 @@ export default function DashboardPage() {
         animate={{ opacity: 1, y: 0 }}
         className="mb-8"
       >
-        <h1 className="text-2xl font-bold text-foreground">Welcome back, Priya</h1>
+        <h1 className="text-2xl font-bold text-foreground">AI Resume Screening Dashboard</h1>
         <p className="text-sm text-text-muted mt-1">
           {new Date().toLocaleDateString('en-IN', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' })}
         </p>

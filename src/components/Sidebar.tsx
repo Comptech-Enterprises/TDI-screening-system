@@ -3,7 +3,7 @@
 import Image from 'next/image';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
-import { LayoutDashboard, FileSearch, Trophy, Clock, Shield, LogOut, Menu, X } from 'lucide-react';
+import { LayoutDashboard, FileSearch, Trophy, Clock, Shield, Menu, X } from 'lucide-react';
 import { useState } from 'react';
 import clsx from 'clsx';
 
@@ -91,13 +91,6 @@ export default function Sidebar() {
             {collapsed ? <Menu size={20} /> : <X size={20} />}
             {!collapsed && <span>Collapse</span>}
           </button>
-          <Link
-            href="/login"
-            className="flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm text-text-muted hover:bg-danger-bg hover:text-danger transition-all duration-200 mt-1"
-          >
-            <LogOut size={20} className="shrink-0" />
-            {!collapsed && <span>Log out</span>}
-          </Link>
         </div>
       </aside>
       <div className={clsx('transition-all duration-300', collapsed ? 'ml-[72px]' : 'ml-[260px]')} />
