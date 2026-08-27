@@ -1,6 +1,6 @@
 'use client';
 
-import { useState } from 'react';
+import { Suspense, useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useRouter, useSearchParams } from 'next/navigation';
 import { Loader2, Sparkles } from 'lucide-react';
@@ -10,7 +10,7 @@ import clsx from 'clsx';
 
 const roles: Role[] = ['Sales', 'HR', 'Technology'];
 
-export default function ScreenPage() {
+function ScreenContent() {
   const searchParams = useSearchParams();
   const defaultRole = (searchParams.get('role') as Role) || 'Sales';
   const [selectedRole, setSelectedRole] = useState<Role>(defaultRole);
@@ -121,5 +121,13 @@ export default function ScreenPage() {
         )}
       </AnimatePresence>
     </div>
+  );
+}
+
+export default function ScreenPage() {
+  return (
+    <Suspense fallback={<div className="p-8 text-center text-text-muted">Loading screening form...</div>}>
+      <ScreenContent />
+    </Suspense>
   );
 }

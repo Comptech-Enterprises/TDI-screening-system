@@ -1,5 +1,6 @@
 'use client';
 
+import Image from 'next/image';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import { LayoutDashboard, FileSearch, Trophy, Clock, Shield, LogOut, Menu, X } from 'lucide-react';
@@ -27,11 +28,18 @@ export default function Sidebar() {
         )}
         style={{ boxShadow: 'var(--shadow-sm)' }}
       >
-        <div className="flex items-center gap-3 px-5 h-16 border-b border-border shrink-0">
+        <div className="flex items-center gap-3 px-4 h-16 border-b border-border shrink-0">
           {!collapsed && (
             <div className="flex items-center gap-3 animate-fade-in">
-              <div className="w-8 h-8 rounded-lg bg-primary flex items-center justify-center">
-                <span className="text-white font-bold text-sm">TDI</span>
+              <div className="relative w-10 h-10 rounded-xl overflow-hidden flex items-center justify-center bg-white border border-border shrink-0 p-1 shadow-sm">
+                <Image
+                  src="/TDI.webp"
+                  alt="TDI Logo"
+                  width={40}
+                  height={40}
+                  className="w-full h-full object-contain scale-110"
+                  priority
+                />
               </div>
               <div>
                 <h1 className="text-sm font-semibold text-foreground leading-tight">TDI Infratech</h1>
@@ -40,8 +48,15 @@ export default function Sidebar() {
             </div>
           )}
           {collapsed && (
-            <div className="w-8 h-8 rounded-lg bg-primary flex items-center justify-center mx-auto">
-              <span className="text-white font-bold text-sm">T</span>
+            <div className="relative w-10 h-10 rounded-xl overflow-hidden flex items-center justify-center mx-auto shrink-0 bg-white border border-border p-1 shadow-sm">
+              <Image
+                src="/TDI.webp"
+                alt="TDI Logo"
+                width={40}
+                height={40}
+                className="w-full h-full object-contain scale-110"
+                priority
+              />
             </div>
           )}
         </div>

@@ -10,6 +10,10 @@ const inter = Inter({
 export const metadata: Metadata = {
   title: "TDI Infratech - AI Resume Screening",
   description: "AI-powered resume screening dashboard for TDI Infratech HR team",
+  icons: {
+    icon: "/TDI.webp",
+    apple: "/TDI.webp",
+  },
 };
 
 export default function RootLayout({ children }: LayoutProps<"/">) {

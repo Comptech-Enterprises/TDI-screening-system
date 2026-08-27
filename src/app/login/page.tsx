@@ -4,6 +4,7 @@ import { useState } from 'react';
 import { motion } from 'framer-motion';
 import { Eye, EyeOff, LogIn } from 'lucide-react';
 import { useRouter } from 'next/navigation';
+import Image from 'next/image';
 
 export default function LoginPage() {
   const [email, setEmail] = useState('');
@@ -46,8 +47,15 @@ export default function LoginPage() {
             transition={{ delay: 0.2 }}
             className="flex flex-col items-center mb-8"
           >
-            <div className="w-14 h-14 rounded-xl bg-primary flex items-center justify-center mb-4 shadow-lg">
-              <span className="text-white font-bold text-xl">TDI</span>
+            <div className="relative w-20 h-20 rounded-2xl bg-white border border-border flex items-center justify-center mb-4 p-2 shadow-md overflow-hidden">
+              <Image
+                src="/TDI.webp"
+                alt="TDI Infratech Logo"
+                width={80}
+                height={80}
+                className="w-full h-full object-contain scale-115"
+                priority
+              />
             </div>
             <h1 className="text-xl font-bold text-foreground">TDI Infratech</h1>
             <p className="text-sm text-text-muted mt-1">AI Resume Screening Dashboard</p>
