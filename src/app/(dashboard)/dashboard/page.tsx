@@ -29,7 +29,7 @@ export default function DashboardPage() {
         </p>
       </motion.div>
 
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 mb-8">
+      <div className="grid grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-4 mb-8">
         <StatsCard label="Screened today" value={dashboardStats.todayCount} icon={Users} color="blue" index={0} />
         <StatsCard label="This week" value={dashboardStats.weekCount} icon={CalendarDays} color="green" index={1} />
         <StatsCard label="Avg fit score" value={`${dashboardStats.avgScore}%`} icon={TrendingUp} color="amber" index={2} />
@@ -43,7 +43,7 @@ export default function DashboardPage() {
         className="mb-8"
       >
         <h2 className="text-lg font-semibold text-foreground mb-4">Screen by role</h2>
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+        <div className="grid grid-cols-2 md:grid-cols-3 gap-3 sm:gap-4">
           {roleCards.map((card, i) => {
             const Icon = card.icon;
             return (
@@ -52,26 +52,21 @@ export default function DashboardPage() {
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ delay: 0.4 + i * 0.1 }}
-                className={`bg-surface rounded-xl border border-border ${card.border} p-6 transition-all duration-300 group`}
+                className={`bg-surface rounded-xl border border-border ${card.border} p-3 sm:p-6 transition-all duration-300 group h-full flex flex-col`}
                 style={{ boxShadow: 'var(--shadow-sm)' }}
               >
-                <div className={`w-12 h-12 rounded-xl bg-gradient-to-br ${card.color} flex items-center justify-center mb-4 group-hover:scale-110 transition-transform duration-300`}>
-                  <Icon size={24} className="text-primary" />
+                <div className={`w-9 h-9 sm:w-12 sm:h-12 rounded-xl bg-gradient-to-br ${card.color} flex items-center justify-center mb-2.5 sm:mb-4 group-hover:scale-110 transition-transform duration-300`}>
+                  <Icon size={18} className="text-primary sm:hidden" />
+                  <Icon size={24} className="text-primary hidden sm:block" />
                 </div>
-                <h3 className="text-base font-semibold text-foreground">{card.role}</h3>
-                <p className="text-xs text-text-muted mt-1 mb-5">{card.description}</p>
-                <div className="flex gap-2">
+                <h3 className="text-sm sm:text-base font-semibold text-foreground">{card.role}</h3>
+                <p className="text-[11px] sm:text-xs text-text-muted mt-1 mb-3 sm:mb-5">{card.description}</p>
+                <div className="flex gap-2 mt-auto">
                   <Link
                     href={`/screen?role=${card.role}`}
-                    className="flex-1 flex items-center justify-center gap-1.5 px-3 py-2 rounded-lg bg-primary text-white text-xs font-semibold hover:bg-primary-light transition-colors shadow-sm"
+                    className="flex-1 flex items-center justify-center gap-1.5 px-2 sm:px-3 py-1.5 sm:py-2 rounded-lg bg-primary text-white text-[11px] sm:text-xs font-semibold hover:bg-primary-light transition-colors shadow-sm"
                   >
                     Screen resume
-                  </Link>
-                  <Link
-                    href={`/top5?role=${card.role}`}
-                    className="flex items-center justify-center gap-1 px-3 py-2 rounded-lg border border-border text-text-secondary text-xs font-medium hover:bg-surface-hover transition-colors"
-                  >
-                    Top 5
                   </Link>
                 </div>
               </motion.div>
@@ -114,7 +109,7 @@ export default function DashboardPage() {
                     className="border-b border-border-light last:border-0 hover:bg-surface-hover transition-colors group"
                   >
                     <td className="px-5 py-3.5">
-                      <p className="font-medium text-foreground">{s.candidateName}</p>
+                      <p className="text-xs sm:text-sm font-medium text-foreground">{s.candidateName}</p>
                       <p className="text-xs text-text-muted">{s.currentRole}</p>
                     </td>
                     <td className="px-5 py-3.5">

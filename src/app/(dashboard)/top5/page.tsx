@@ -87,19 +87,21 @@ export default function Top5Page() {
               className="bg-surface rounded-xl border border-border p-5 hover:border-primary/20 transition-all duration-300 group"
               style={{ boxShadow: 'var(--shadow-sm)' }}
             >
-              <div className="flex items-center gap-4">
-                <div className={clsx(
-                  'w-10 h-10 rounded-xl flex items-center justify-center font-bold text-sm border shrink-0',
-                  i < 3 ? rankColors[i] : 'bg-background text-text-muted border-border'
-                )}>
-                  #{i + 1}
-                </div>
+              <div className="flex flex-col sm:flex-row sm:items-center gap-4">
+                <div className="flex items-center gap-4 flex-1 min-w-0">
+                  <div className={clsx(
+                    'w-10 h-10 rounded-xl flex items-center justify-center font-bold text-sm border shrink-0',
+                    i < 3 ? rankColors[i] : 'bg-background text-text-muted border-border'
+                  )}>
+                    #{i + 1}
+                  </div>
 
-                <div className="flex-1 min-w-0">
-                  <h3 className="font-semibold text-foreground">{candidate.candidateName}</h3>
-                  <p className="text-xs text-text-muted mt-0.5">
-                    {candidate.currentRole} · {candidate.candidateLocation} · Screened {new Date(candidate.createdAt).toLocaleDateString('en-IN', { day: 'numeric', month: 'short' })}
-                  </p>
+                  <div className="flex-1 min-w-0">
+                    <h3 className="font-semibold text-foreground">{candidate.candidateName}</h3>
+                    <p className="text-xs text-text-muted mt-0.5">
+                      {candidate.currentRole} · {candidate.candidateLocation} · Screened {new Date(candidate.createdAt).toLocaleDateString('en-IN', { day: 'numeric', month: 'short' })}
+                    </p>
+                  </div>
                 </div>
 
                 <div className="flex items-center gap-3 shrink-0">
@@ -121,7 +123,7 @@ export default function Top5Page() {
                     </div>
                   </div>
 
-                  <div className="flex gap-1.5 opacity-0 group-hover:opacity-100 transition-opacity">
+                  <div className="flex gap-1.5 sm:opacity-0 sm:group-hover:opacity-100 transition-opacity">
                     <Link
                       href={`/screen/result/${candidate.id}`}
                       className="p-2 rounded-lg hover:bg-primary-lighter text-text-muted hover:text-primary transition-colors"

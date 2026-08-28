@@ -53,6 +53,18 @@ function ScreenContent() {
   const [currentProcessingIndex, setCurrentProcessingIndex] = useState(0);
   const [results, setResults] = useState<AnalyzedResult[]>([]);
   const [filterRec, setFilterRec] = useState<'All' | 'Interview' | 'Do Not Interview'>('All');
+  const [viewMode, setViewMode] = useState<'top5' | 'all'>('all');
+  const [isRanking, setIsRanking] = useState(false);
+  const [rankingLabel, setRankingLabel] = useState('');
+
+  const handleViewModeChange = async (mode: 'top5' | 'all') => {
+    if (mode === viewMode) return;
+    setRankingLabel(mode === 'top5' ? 'Selecting Top 5 Candidates' : 'Compiling Full Candidate List');
+    setIsRanking(true);
+    await new Promise((r) => setTimeout(r, 1200));
+    setViewMode(mode);
+    setIsRanking(false);
+  };
 
   const startAnalysis = async () => {
     if (files.length === 0 || !selectedRole) return;
@@ -116,7 +128,9 @@ function ScreenContent() {
 
   const interviewCount = results.filter((r) => r.recommendation === 'Interview').length;
   const avgScore = results.length > 0 ? Math.round(results.reduce((acc, r) => acc + r.overallScore, 0) / results.length) : 0;
-  const filteredResults = results.filter((r) => filterRec === 'All' || r.recommendation === filterRec);
+  const rankedResults = [...results].sort((a, b) => b.overallScore - a.overallScore);
+  const recFilteredResults = rankedResults.filter((r) => filterRec === 'All' || r.recommendation === filterRec);
+  const filteredResults = viewMode === 'top5' ? recFilteredResults.slice(0, 5) : recFilteredResults;
 
   return (
     <div className="max-w-5xl mx-auto space-y-6">
@@ -139,26 +153,26 @@ function ScreenContent() {
             className="space-y-6"
           >
             {/* Role Selection */}
-            <div className="bg-surface rounded-xl border border-border p-6" style={{ boxShadow: 'var(--shadow-sm)' }}>
-              <div className="flex items-center justify-between mb-3">
-                <label className="text-sm font-semibold text-foreground">Target Role for Screening</label>
-                <span className="text-xs text-text-muted">Evaluates against role-specific criteria</span>
+            <div className="bg-surface rounded-xl border border-border p-4 sm:p-6" style={{ boxShadow: 'var(--shadow-sm)' }}>
+              <div className="flex items-start justify-between mb-3 gap-2">
+                <label className="text-xs sm:text-sm font-semibold text-foreground">Target Role for Screening</label>
+                <span className="text-[10px] sm:text-xs text-text-muted text-right max-w-[45%] sm:max-w-none">Evaluates against role-specific criteria</span>
               </div>
-              <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
+              <div className="grid grid-cols-3 gap-2 sm:gap-3">
                 {roles.map((role) => (
                   <button
                     key={role}
                     type="button"
                     onClick={() => setSelectedRole(role)}
                     className={clsx(
-                      'px-4 py-3 rounded-xl text-sm font-medium transition-all duration-200 border text-center flex flex-col items-center justify-center gap-1',
+                      'px-2 py-2 sm:px-4 sm:py-3 rounded-xl text-xs sm:text-sm font-medium transition-all duration-200 border text-center flex flex-col items-center justify-center gap-0.5 sm:gap-1',
                       selectedRole === role
                         ? 'bg-primary text-white border-primary shadow-md'
                         : 'bg-background text-text-secondary border-border hover:border-primary/40 hover:bg-surface-hover'
                     )}
                   >
                     <span className="font-semibold">{role}</span>
-                    <span className={clsx('text-[11px]', selectedRole === role ? 'text-white/80' : 'text-text-muted')}>
+                    <span className={clsx('text-[9px] sm:text-[11px] leading-tight', selectedRole === role ? 'text-white/80' : 'text-text-muted')}>
                       {role === 'Sales' && 'Real estate & properties'}
                       {role === 'HR' && 'Talent & HR ops'}
                       {role === 'Technology' && 'Full stack & Cloud'}
@@ -169,10 +183,10 @@ function ScreenContent() {
             </div>
 
             {/* Bulk File Upload */}
-            <div className="bg-surface rounded-xl border border-border p-6" style={{ boxShadow: 'var(--shadow-sm)' }}>
-              <div className="flex items-center justify-between mb-3">
-                <label className="text-sm font-semibold text-foreground">Upload Resumes (Bulk Supported)</label>
-                <span className="text-xs text-text-muted">Drop multiple files or click to select</span>
+            <div className="bg-surface rounded-xl border border-border p-4 sm:p-6" style={{ boxShadow: 'var(--shadow-sm)' }}>
+              <div className="flex items-start justify-between mb-3 gap-2">
+                <label className="text-xs sm:text-sm font-semibold text-foreground">Upload Resumes (Bulk Supported)</label>
+                <span className="text-[10px] sm:text-xs text-text-muted text-right max-w-[45%] sm:max-w-none">Drop multiple files or click to select</span>
               </div>
               <FileUpload files={files} onFilesChange={setFiles} multiple={true} />
             </div>
@@ -334,8 +348,8 @@ function ScreenContent() {
             </div>
 
             {/* Filter Tabs */}
-            <div className="flex items-center justify-between">
-              <div className="flex gap-2">
+            <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+              <div className="flex flex-wrap gap-2">
                 {(['All', 'Interview', 'Do Not Interview'] as const).map((filter) => (
                   <button
                     key={filter}
@@ -351,10 +365,53 @@ function ScreenContent() {
                   </button>
                 ))}
               </div>
+              <div className="flex items-center gap-1 p-1 rounded-lg bg-surface border border-border self-start sm:self-auto">
+                <button
+                  onClick={() => handleViewModeChange('top5')}
+                  disabled={isRanking}
+                  className={clsx(
+                    'flex items-center gap-1.5 px-3 py-1.5 rounded-md text-xs font-semibold transition-all disabled:opacity-60',
+                    viewMode === 'top5'
+                      ? 'bg-primary text-white shadow-sm'
+                      : 'text-text-secondary hover:bg-surface-hover'
+                  )}
+                >
+                  <Award size={13} /> Top 5
+                </button>
+                <button
+                  onClick={() => handleViewModeChange('all')}
+                  disabled={isRanking}
+                  className={clsx(
+                    'flex items-center gap-1.5 px-3 py-1.5 rounded-md text-xs font-semibold transition-all',
+                    viewMode === 'all'
+                      ? 'bg-primary text-white shadow-sm'
+                      : 'text-text-secondary hover:bg-surface-hover'
+                  )}
+                >
+                  <Users size={13} /> Get all
+                </button>
+              </div>
+            </div>
+            <div className="flex justify-end -mt-2">
               <span className="text-xs text-text-muted">Showing {filteredResults.length} candidates</span>
             </div>
 
             {/* Ranked Candidates Cards List */}
+            {isRanking ? (
+              <div
+                className="bg-surface rounded-2xl border border-border p-10 text-center"
+                style={{ boxShadow: 'var(--shadow-sm)' }}
+              >
+                <motion.div
+                  animate={{ rotate: 360 }}
+                  transition={{ repeat: Infinity, duration: 1.2, ease: 'linear' }}
+                  className="w-12 h-12 rounded-2xl bg-primary/10 flex items-center justify-center mx-auto mb-4 text-primary"
+                >
+                  <Loader2 size={26} />
+                </motion.div>
+                <p className="text-sm font-semibold text-foreground">{rankingLabel}</p>
+              </div>
+            ) : (
             <div className="space-y-4">
               {filteredResults.map((candidate, idx) => (
                 <motion.div
@@ -433,6 +490,7 @@ function ScreenContent() {
                 </div>
               )}
             </div>
+            )}
           </motion.div>
         )}
       </AnimatePresence>
